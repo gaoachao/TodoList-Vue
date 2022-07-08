@@ -1,11 +1,9 @@
-# test
+# TodoList-Vue
 
-## Project setup
-```
-npm install
-```
+>  It is a project concerning Todo-List written by Vue.MeanWhile It is the first time that Bitter-Gourd uses vue-cli write a project!
 
 ### Compiles and hot-reloads for development
+
 ```
 npm run serve
 ```
@@ -15,10 +13,3 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

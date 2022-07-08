@@ -6,12 +6,8 @@
 						传递方法为子组件向父组件传递数据提出了一种解决思路
 				-->
 				<MyHeader :receive="receive" />
-				<List :todos="todos" 
-					:checkTodo="checkTodo" 
-					:deleteTodo="deleteTodo" />
-				<MyFooter :todos="todos" 
-					:checkAllTodo="checkAllTodo"
-					:clearAllTodoDone="clearAllTodoDone" />
+				<List :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />
+				<MyFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodoDone="clearAllTodoDone" />
 			</div>
 		</div>
 	</div>
@@ -21,18 +17,15 @@ import MyHeader from './components/MyHeader.vue'
 import List from './components/List.vue'
 import MyFooter from './components/MyFooter.vue'
 
-import { nanoid } from 'nanoid'
 
 export default {
 	name: "App",
 	components: { MyHeader, List, MyFooter },
 	data() {
 		return {
-			todos: [
-				{ id: nanoid(), title: '吃饭', done: true },
-				{ id: nanoid(), title: '睡觉', done: true },
-				{ id: nanoid(), title: '写代码', done: true }
-			]
+			todos: JSON.parse(localStorage.getItem('todos')) || []
+			//避免第一次使用时没有数据JSON.pare 返回 null 没有length属性在 footer组件中报错
+			//因此放上 | []  空数组有length属性且为0
 		}
 	},
 	methods: {
@@ -63,10 +56,18 @@ export default {
 				})
 			}
 		},
-		clearAllTodoDone(){
-			this.todos = this.todos.filter((todo)=>{
+		clearAllTodoDone() {
+			this.todos = this.todos.filter((todo) => {
 				return !todo.done;
 			})
+		}
+	},
+	watch: {
+		todos: {
+			deep:true,
+			handler(value) {
+				localStorage.setItem('todos', JSON.stringify(value));
+			}
 		}
 	}
 }

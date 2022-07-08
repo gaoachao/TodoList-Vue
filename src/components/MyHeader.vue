@@ -14,9 +14,9 @@ export default {
 	methods:{
 		add(e){
 			//如果input框内没有东西则按下回车无反应
-			if(!e.target.value) return;
+			if(!e.target.value | e.target.value.trim().length === 0) return;
 			//将数据包装成对象
-			const todoObj = {id:nanoid(),title:e.target.value,done:false}
+			const todoObj = {id:nanoid(),title:e.target.value.trim(),done:false}
 			this.receive(todoObj);
 			//在按下回车后清空input
 			e.target.value='';
