@@ -6,4 +6,7 @@ Vue.config.productionTip = false;
 new Vue({
 	//将app组件放入容器中
   render: h => h(App),
+	beforeCreate(){
+		Vue.prototype.$bus = this;
+	}
 }).$mount('#app')

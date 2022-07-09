@@ -4,24 +4,58 @@
 			<input type="checkbox" 
 			:checked="thing.done" 
 			@click="handleCheck(thing.id)">
-			<span>{{thing.title}}</span>
+			<span v-show="!thing.isEdit">{{thing.title}}</span>
+			<input 
+				type="text" 
+				ref="inputTitle"
+				v-show="thing.isEdit" 
+				:value="thing.title"
+				@blur="handleBlur(thing.id,$event)"
+				>
+			<!--此处直接传入事件对象-->
 		</label>
 		<button class="btn btn-danger" 
 		@click="handleDelete(thing.id)">删除</button>
+			<button class="btn btn-edit"
+		v-show="!thing.isEdit"
+		@click="handleEdit(thing)">编辑</button>
 	</li>
 </template>
 <script>
+import { toUnicode } from 'punycode';
+
 export default {
 	name:'MyItem',
-	props:['thing','checkTodo','deleteTodo'],
+	props:['thing'],
 	methods:{
 		handleCheck(id){
-			this.checkTodo(id);
+			this.$bus.$emit('checkTodo',id);
 		},
-		handleDelete(id){
-			if(confirm('确定删除吗？')){
-				// console.log(d);
-				this.deleteTodo(id);
+		handleEdit(thing){
+			if(thing.hasOwnProperty('isEdit')){
+				thing.isEdit = true;
+			} else {
+				this.$set(thing,'isEdit',true);
+			}
+			// this.$refs.inputTitle.focus(); 
+			// 这样写是不奏效的，要等整个回调执行完毕后才会去再次解析模板然后出现input框
+			this.$nextTick(function(){
+				this.$refs.inputTitle.focus(); 
+			})
+
+		},
+		handleBlur(id,e){
+			if(e.target.value.trim().length === 0){
+				alert("Todo Item Can't be blank");
+				return;
+			} else {
+				console.log(e.target.value);
+				this.$bus.$emit('editConfirm',id,e.target.value);
+			}
+		},
+		handleDelete(id,e){
+			if(confirm('Confirm to delete?')){
+				this.$bus.$emit('deleteTodo',id);
 			}
 		}
 	}

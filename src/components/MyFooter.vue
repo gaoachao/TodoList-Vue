@@ -10,7 +10,6 @@
   </div>
 </template>
 <script>
-
 export default {
 	name:'MyFooter',
 	props:["todos","checkAllTodo","clearAllTodoDone"],

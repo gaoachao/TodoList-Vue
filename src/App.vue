@@ -1,5 +1,5 @@
 <template >
-	<div id="root">
+	<div id='root'>
 		<div class="todo-container">
 			<div class="todo-wrap">
 				<!--父组件可以向子组件传递数据或者方法
@@ -16,8 +16,6 @@
 import MyHeader from './components/MyHeader.vue'
 import List from './components/List.vue'
 import MyFooter from './components/MyFooter.vue'
-
-
 export default {
 	name: "App",
 	components: { MyHeader, List, MyFooter },
@@ -37,6 +35,14 @@ export default {
 				if (todo.id === id) {
 					todo.done = !todo.done;
 					// console.log(todo.done)
+				}
+			})
+		},
+		editConfirm(id,newTitle) {
+			this.todos.forEach((todo) => {
+				if (todo.id === id) {
+					todo.title = newTitle;
+					todo.isEdit = !todo.isEdit; 
 				}
 			})
 		},
@@ -64,12 +70,24 @@ export default {
 	},
 	watch: {
 		todos: {
-			deep:true,
+			deep: true,
 			handler(value) {
 				localStorage.setItem('todos', JSON.stringify(value));
 			}
 		}
-	}
+	},
+	mounted() {
+		//此处的回调函数不需要写成 this.checkTodo(id) 
+		//只需要写明白是执行哪个回调函数，然后this不能忘记
+		this.$bus.$on('checkTodo', this.checkTodo);
+		this.$bus.$on('editConfirm', this.editConfirm);
+		this.$bus.$on('deleteTodo', this.deleteTodo);
+	},
+	beforeDestroy() {
+		this.$bus.$off('checkTodo');
+		this.$bus.$off('deleteTodo');
+		this.$bus.$off('editConfirm');
+	},
 }
 </script>
 <style>
@@ -100,6 +118,17 @@ body {
 .btn-danger:hover {
 	color: #fff;
 	background-color: #bd362f;
+}
+
+.btn-edit {
+	color: #fff;
+	background-color: #68b0ef;
+	border: 1px solid #1c7bc9;
+}
+
+.btn-edit:hover {
+	color: #fff;
+	background-color: #567cf0;
 }
 
 .btn:focus {
