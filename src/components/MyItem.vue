@@ -1,4 +1,5 @@
 <template>
+<transition name="todo"  appear>
 	<li>
 		<label>
 			<input type="checkbox" 
@@ -20,6 +21,7 @@
 		v-show="!thing.isEdit"
 		@click="handleEdit(thing)">编辑</button>
 	</li>
+</transition>
 </template>
 <script>
 import { toUnicode } from 'punycode';
@@ -49,7 +51,6 @@ export default {
 				alert("Todo Item Can't be blank");
 				return;
 			} else {
-				console.log(e.target.value);
 				this.$bus.$emit('editConfirm',id,e.target.value);
 			}
 		},
@@ -97,5 +98,22 @@ li:last-child {
 /* 让鼠标悬浮在li上li的背景色变灰 */
 li:hover button{
   display: block;
+}
+
+.todo-enter-active{
+	animation:move 0.7s linear
+}
+
+.todo-leave-active{
+	animation:move 0.7s linear reverse
+}
+
+@keyframes move {
+	from{
+		transform:translateX(100%);
+	}
+	to{
+		transform:translateX(0px);
+	}
 }
 </style>

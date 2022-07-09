@@ -16,7 +16,6 @@ export default {
 			//如果input框内没有东西则按下回车无反应
 			if(!e.target.value | e.target.value.trim().length === 0) return;
 			//将数据包装成对象
-			console.log(e.target.value);
 			const todoObj = {id:nanoid(),title:e.target.value.trim(),done:false,isEdit:false}
 			this.receive(todoObj);
 			//在按下回车后清空input
